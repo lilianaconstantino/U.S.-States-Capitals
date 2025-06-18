@@ -5,6 +5,12 @@
     background-color: #C2E6F9; 
 }
 .header {
-    color: red; 
+    color: #3D3F60; 
    
+}
+
+.header h1 {
+    font-size: 50px;
+    font-weight: 500;
+  
 }
