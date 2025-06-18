@@ -1,0 +1,12 @@
+.mapContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #C2E6F9;
+}
+.map {
+    /* border: 1px solid #ccc;
+    border-radius: 10px;*/
+    width: 60%;  
+    padding:1rem;
+  }
