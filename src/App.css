@@ -3,6 +3,11 @@
   display: grid; 
 }
 
+.mapDashboard {
+  height: 100vh;
+  display: grid; 
+}
+
 body {
   font-family: "june-expt-variable", sans-serif;
   font-variation-settings: "STYL" 50;

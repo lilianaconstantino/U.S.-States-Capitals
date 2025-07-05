@@ -3,9 +3,7 @@ import { USAMap} from '@mirawision/usa-map-react';
 import styles from './Map.module.css';
 import { useEffect, useState } from 'react';
 
-
-
-function Map() {
+function Map({isSideNavOpen, setIsSideNavOpen}) {
 
   const [selectedState, setSelectedState] = useState("");
   const [stateData, setStateData] = useState([]);
@@ -41,7 +39,9 @@ useEffect(() => {
     stateData.forEach((state) => {
       settings[state.postalAbreviation] = {
       onClick: () => {console.log(state);setSelectedState(state.name)
+        setIsSideNavOpen(true)
         alert(`You selected ${state.name}`)
+       
        }
 
       }
