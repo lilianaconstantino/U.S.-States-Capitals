@@ -1,24 +1,17 @@
 import React from 'react';
 import styles from './Footer.module.css';
+import Button from '../Button/Button';
 
-function Footer () {
-  
-    return(
-      <div className= {styles.footerContainer}>
-      <footer className= {styles.buttonContainer}>
-        <button className = {styles.footerButtons}>
-          Start
-        </button>
-        <button className = {styles.footerButtons}>
-         Pop Quiz
-        </button>
-        <button className = {styles.footerButtons}>
-            Library
-        </button>
+function Footer() {
+  return (
+    <div className={styles.footerContainer}>
+      <footer className={styles.buttonContainer}>
+        <Button>Start</Button>
+        <Button>Pop Quiz</Button>
+        <Button>Library</Button>
       </footer>
-      </div>
-     
-    );
-  };
+    </div>
+  );
+}
   
   export default Footer; 
