@@ -7,11 +7,12 @@
 .buttonContainer {
  display: flex;
   gap: 8px;
-  border: 1rem solid #F5BB46;
-  border-radius: 10px;
+  border: .01rem solid #383b51;
+  border-radius: 5px;
   background-color: #F5BB46;
   width: 100%;
-  max-width: 250px;
+  max-width: 460px;
+  padding: 20px;
   justify-content: center;
   align-items: center;
 }
