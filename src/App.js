@@ -3,21 +3,18 @@ import Header from './Components/Header/Header';
 import Map from './Components/Map/Map';
 import Footer from './Components/Footer/Footer';
 import './App.css';
-import SideNav from './Components/SideNav /SideNav';
-
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 function App() {
-  const[isSideNavOpen, setIsSideNavOpen] = useState(false)
-  const showSideNavGridClass = isSideNavOpen ? { gridTemplateColumns: '3fr 1fr' }
-  : {};
-
+  const [selectedState, setSelectedState] = useState("");
 
   return (
-    <div style= {showSideNavGridClass} className={"dashboard"}>
-      <div className={"mapDashboard"}><Header/> 
-      <Map isSideNavOpen = {isSideNavOpen} setIsSideNavOpen = {setIsSideNavOpen}/>
-      <Footer/> </div> 
-      {isSideNavOpen && <SideNav/> }
+    <div className={"dashboard"}>
+      <div className={"mapDashboard"}>
+        <Header /> 
+        <Map setSelectedState={setSelectedState} />
+        <Footer /> 
+      </div> 
     </div>
   );
 }
