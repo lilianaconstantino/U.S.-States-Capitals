@@ -31,19 +31,44 @@ function Map({ setSelectedState }) {
     stateCount();
   }, []);
 
+  // Define region colors
+  const regionColors = {
+    west: { fill: '#EEE485', stroke: '#E98F36' },
+    midwest: { fill: '#F1AEA9', stroke: '#C24A3B' },
+    south: { fill: '#BDC06B', stroke: '#4A6F45' },
+    northeast: { fill: '#8FBBD3', stroke: '#426D96' }
+  };
+
+  // Define which states belong to which region
+  const regions = {
+    west: ['CA', 'OR', 'WA', 'NV', 'ID', 'UT', 'AZ', 'CO', 'WY', 'MT', 'NM', 'AK', 'HI'],
+    midwest: ['ND', 'SD', 'NE', 'KS', 'MN', 'IA', 'MO', 'WI', 'IL', 'MI', 'IN', 'OH'],
+    south: ['TX', 'OK', 'AR', 'LA', 'MS', 'AL', 'TN', 'KY', 'WV', 'VA', 'NC', 'SC', 'GA', 'FL', 'DE', 'MD', 'DC'],
+    northeast: ['PA', 'NJ', 'NY', 'CT', 'RI', 'MA', 'VT', 'NH', 'ME']
+  };
+
   const handleStateClick = () => {
     const settings = {};
-    console.log(stateData);
-  
+
     stateData.forEach((state) => {
+      // Find which region this state belongs to
+      let regionStyle = { fill: '#f0f0f0', stroke: '#333' }; // default gray
+      
+      Object.entries(regions).forEach(([regionName, states]) => {
+        if (states.includes(state.postalAbreviation)) {
+          regionStyle = regionColors[regionName];
+        }
+      });
+
       settings[state.postalAbreviation] = {
+        ...regionStyle,
         onClick: () => {
           console.log("State clicked:", state.name);
-          setSelectedState(state.name); // Pass the state name, not the whole object
+          setSelectedState(state.name);
         }
-      }
+      };
     });
-  
+
     return settings;
   };
 
