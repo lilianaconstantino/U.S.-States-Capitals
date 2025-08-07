@@ -34,17 +34,16 @@ function Map({ setSelectedState }) {
   const handleStateClick = () => {
     const settings = {};
     console.log(stateData);
-
+  
     stateData.forEach((state) => {
       settings[state.postalAbreviation] = {
         onClick: () => {
-          console.log(state);
-          setSelectedState(state);
-          alert(`You selected ${state.name}`);
+          console.log("State clicked:", state.name);
+          setSelectedState(state.name); // Pass the state name, not the whole object
         }
       }
     });
-
+  
     return settings;
   };
 
