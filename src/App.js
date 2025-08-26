@@ -5,12 +5,14 @@ import Footer from './Components/Footer/Footer';
 import Modal from './Components/Modal/Modal';
 import './App.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import GameScreen from './Components/GameScreen/GameScreen';
 
 function App() {
   const [allStatesData, setAllStatesData] = useState({});
   const [loading, setLoading] = useState(true);
   const [selectedState, setSelectedState] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const [currentView, setCurrentView] = useState('main'); 
 
   useEffect(() => {
     fetchAllStatesData();
@@ -68,11 +70,24 @@ function App() {
 
   return (
     <div>
+    {/* MAIN PAGE */}
+    {currentView === 'main' && (
       <div className="mapDashboard">
         <Header /> 
         <Map setSelectedState={handleStateClick} />
-        <Footer /> 
+        <Footer 
+          onStartGame={() => setCurrentView('game')}
+        />
       </div>
+    )}
+    
+    {/* GAME PAGE */}
+    {currentView === 'game' && (
+      <GameScreen
+        allStatesData={allStatesData}
+        onBackToMain={() => setCurrentView('main')}
+      />
+    )}
       <Modal 
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
@@ -80,6 +95,6 @@ function App() {
       />
     </div>
   );
-}; // <- This closing brace was missing
+}; 
 
 export default App;
