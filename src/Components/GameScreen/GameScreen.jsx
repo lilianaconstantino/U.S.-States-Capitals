@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import styles from './GameScreen.module.css';
 import Button from '../Button/Button';
+import Map from '../Map/Map';
 
-function GameScreen({ allStatesData, onBackToMain }) {
+function GameScreen() {
   const [isGameStarted, setIsGameStarted] = useState(false);
   const [currentState, setCurrentState] = useState(null);
   
@@ -12,18 +13,11 @@ function GameScreen({ allStatesData, onBackToMain }) {
   };
 
   return(
-    <div>
-      {!isGameStarted && ( 
-        <Button text="Start Game" onClick={handleStartGame} />
-      )}
-
-      {isGameStarted && (
-        <div>
-          <p>Game is now running!</p>
-          {/* Now you can use allStatesData for your game logic */}
-        </div>
-      )}
+     <div>
+      <h1>Game Screen</h1>
+      <p>This will be your game area with the map and capital guessing.</p>
     </div>
+
   );
 };
 
