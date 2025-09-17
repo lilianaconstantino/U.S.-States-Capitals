@@ -7,11 +7,7 @@ import Footer from "../../Components/Footer/Footer";
 function Layout() {
   return (
       <div>
-      <Header />
-      <main>
         <Outlet /> {/* This is where HomePage or GameScreen will render */}
-      </main>
-      <Footer />
     </div>
   );
 };
