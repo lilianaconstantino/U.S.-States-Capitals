@@ -3,7 +3,7 @@ import { USAMap } from '@mirawision/usa-map-react';
 import styles from './Map.module.css';
 import { useEffect, useState } from 'react';
 
-function Map({ onStateClick }) {
+function Map({ onStateClick, clickedStates }) {
   const [stateData, setStateData] = useState([]);
   console.log("stateData in variable", stateData);
 
@@ -62,6 +62,12 @@ function Map({ onStateClick }) {
 
       settings[state.postalAbreviation] = {
         ...regionStyle,
+        fill:
+         clickedStates?.[state.postalAbreviation] === "correct"
+          ? "green"
+          : clickedStates?.[state.postalAbreviation] === "wrong"
+          ? "red"
+          : regionStyle.fill,
         onClick: () => {
           console.log("State clicked:", state.name);
           onStateClick?.(state);

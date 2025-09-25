@@ -1,0 +1,6 @@
+.layout {
+    background-color: #C2E6F9;
+    display: grid;
+    overflow: hidden;
+    min-height: 100dvh;
+}
