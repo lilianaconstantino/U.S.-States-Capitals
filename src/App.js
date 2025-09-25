@@ -14,6 +14,7 @@ const routes = createBrowserRouter([
     children: [
       { path: "/", element: <HomePage /> },
       { path: "/gamescreen", element: <GameScreen /> },
+      // { path: "/library", element: <Library /> },
     ],
   },
 ]);
