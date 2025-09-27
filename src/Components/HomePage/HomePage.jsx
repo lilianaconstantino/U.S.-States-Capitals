@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import Map from '../Map/Map';
 import Modal from '../Modal/Modal'; // adjust import path to your modal
-
+import Header from '../Header/Header';
+import Footer from '../Footer/Footer';
 function HomePage() {
   const [selectedState, setSelectedState] = useState(null);
 
@@ -13,6 +14,7 @@ function HomePage() {
 
   return (
     <>
+    <Header/>
       <Map onStateClick={handleStateClick} />
 
       <Modal 
@@ -20,6 +22,7 @@ function HomePage() {
         onClose={closeModal} 
         selectedState={selectedState} 
       />
+      <Footer/>
     </>
   );
 }
