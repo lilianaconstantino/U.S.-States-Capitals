@@ -8,7 +8,7 @@ function GameScreen() {
   const [stateData, setStateData] = useState([]);
   const [currentState, setCurrentState] = useState(null);
   const [clickedStates, setClickedStates] = useState({});
-  const [hint, setHint] = useState("");
+  const [hint, setHint] = useState([]);
   const [hintStep, setHintStep] = useState(0);
 
   const navigate = useNavigate();
@@ -49,7 +49,7 @@ function GameScreen() {
     const randomIndex = Math.floor(Math.random() * stateData.length);
     setCurrentState(stateData[randomIndex]);
     setClickedStates({});
-    setHint(""); // reset hint text
+    setHint([]); // reset hint text
     setHintStep(0);
   };
 
@@ -89,9 +89,12 @@ function GameScreen() {
         hintMessage = "No more hints available!";
         break;
     }
-
-    setHint(hintMessage);
-    setHintStep((prev) => prev + 1);
+    if (hintStep < 3) {
+     setHint((prev) => [...prev, hintMessage]); // append instead of replace
+     setHintStep((prev) => prev + 1);
+    }  else {
+     setHint((prev) => [...prev, hintMessage]); // show "no more hints"
+    }
   };
 
   return (
@@ -111,7 +114,14 @@ function GameScreen() {
         Hint
       </Button>
 
-      {hint && <div className={styles.hintBox}>{hint}</div>}
+      {hint.length > 0 && (
+        <div className={styles.hintBox}>
+          {hint.map((h, index) => (
+            <div key={index}>{h}</div>
+          ))}
+        </div>
+      )}
+
     </div>
   );
 }

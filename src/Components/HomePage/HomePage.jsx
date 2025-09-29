@@ -8,7 +8,6 @@ import GameScreen from "../GameScreen/GameScreen";
 function HomePage() {
   const [selectedState, setSelectedState] = useState(null);
   const [isGameScreen, setIsGameScreen] = useState(false);
-
   const handleStartGame = () => setIsGameScreen(true);
   const handleQuitGame = () => setIsGameScreen(false);
 
