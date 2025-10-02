@@ -2,10 +2,11 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-
 import GameScreen from "./Components/GameScreen/GameScreen";
 import Layout from "./Pages/Layout/Layout";
 import HomePage from "./Components/HomePage/HomePage";
+import ResultsModal from "./Components/ResultsModal/ResultsModal";
+
 
 // Define routes outside App so they're not recreated every render
 const routes = createBrowserRouter([
@@ -14,6 +15,7 @@ const routes = createBrowserRouter([
     children: [
       { path: "/", element: <HomePage /> },
       { path: "/gamescreen", element: <GameScreen /> },
+      {path: "/resultsmodal", element: <ResultsModal />},
       // { path: "/library", element: <Library /> },
     ],
   },

@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import styles from "./GameScreen.module.css";
 import Button from "../Button/Button";
 import Map from "../Map/Map";
+import ResultsModal from "../ResultsModal/ResultsModal";
+import QuitModal from "../QuitModal/QuitModal";
 
 function GameScreen() {
   const [stateData, setStateData] = useState([]);
@@ -10,6 +12,12 @@ function GameScreen() {
   const [clickedStates, setClickedStates] = useState({});
   const [hint, setHint] = useState([]);
   const [hintStep, setHintStep] = useState(0);
+  const [gameStates, setGameStates] = useState([]);
+  const [currentRound, setCurrentRound] = useState(0);
+  const [score, setScore] = useState(0);
+  const [showQuitModal, setShowQuitModal] = useState(false);
+  const [showResults, setShowResults] = useState(false); 
+
 
   const navigate = useNavigate();
 
@@ -37,12 +45,15 @@ function GameScreen() {
     fetchStates();
   }, []);
 
-  // Start game automatically once data is loaded
-  useEffect(() => {
-    if (stateData.length > 0) {
-      generateRandomCapital();
-    }
-  }, [stateData]);
+useEffect(() => {
+  if (stateData.length > 0) {
+    const shuffled = [...stateData].sort(() => 0.5 - Math.random());
+    setGameStates(shuffled);
+    setCurrentRound(0);
+    setCurrentState(shuffled[0]); // start with first capital
+  }
+}, [stateData]);
+
 
   const generateRandomCapital = () => {
     if (stateData.length === 0) return;
@@ -57,18 +68,31 @@ function GameScreen() {
     if (!currentState) return;
 
     if (clickedState.name === currentState.name) {
-      setClickedStates((prev) => ({
-        ...prev,
-        [clickedState.postalAbreviation]: "correct",
-      }));
-      setTimeout(generateRandomCapital, 1200);
+    setClickedStates((prev) => ({
+      ...prev,
+      [clickedState.postalAbreviation]: "correct",
+    }));
+    setScore((prev) => prev + 1);
+  } else {
+    setClickedStates((prev) => ({
+      ...prev,
+      [clickedState.postalAbreviation]: "wrong",
+    }));
+  }
+
+  setTimeout(() => {
+    if (currentRound + 1 < gameStates.length) {
+      const nextRound = currentRound + 1;
+      setCurrentRound(nextRound);
+      setCurrentState(gameStates[nextRound]);
+      setClickedStates({});
+      setHint([]);
+      setHintStep(0);
     } else {
-      setClickedStates((prev) => ({
-        ...prev,
-        [clickedState.postalAbreviation]: "wrong",
-      }));
+      setShowResults(true); // end game
     }
-  };
+  }, 1200);
+};
 
   const generateHint = () => {
     if (!currentState) return;
@@ -105,7 +129,27 @@ function GameScreen() {
         )}
 
         <Button>Menu</Button>
-        <Button onClick={() => navigate("/")}>Quit</Button>
+        <Button onClick={() => setShowQuitModal(true)}>Quit</Button>
+        <QuitModal
+          isOpen={showQuitModal}
+          onConfirm={() => navigate("/")}
+          onCancel={() => setShowQuitModal(false)}
+        />
+
+        <ResultsModal
+          isOpen={showResults}
+          score={score}
+          totalRounds={gameStates.length}
+          onClose={() => navigate("/")}
+          onRestart={() => {
+            setScore(0);
+            setShowResults(false);
+            setCurrentRound(0);
+            setCurrentState(gameStates[0]);
+          }}
+          />
+
+
       </header>
 
       <Map onStateClick={handleStateClick} clickedStates={clickedStates} />

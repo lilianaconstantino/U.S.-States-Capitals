@@ -72,7 +72,7 @@ function Map({ onStateClick, clickedStates }) {
           console.log("State clicked:", state.name);
           onStateClick?.(state);
         }
-      };
+      }; 
     });
 
     return settings;
