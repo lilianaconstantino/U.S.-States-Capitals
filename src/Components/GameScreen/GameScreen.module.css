@@ -27,7 +27,21 @@
 }
 
 .hintButton {
-   display: flex;
-   justify-content: center; /* Centers horizontally */
-   align-items: center;    /* Centers vertically */
+  display: flex;
+  justify-content: center; /* Centers horizontally */
+  align-items: center;    /* Centers vertically */
+}
+
+.capitalAndScore {
+  display: flex;
+  align-items: center;
+  gap: 16px; /* space between capital box and score */
+}
+
+.scoreBox {
+  background-color: #f4f4f4;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-weight: bold;
 }

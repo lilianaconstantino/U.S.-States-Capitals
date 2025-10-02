@@ -125,32 +125,35 @@ useEffect(() => {
     <div>
       <header className={styles.headerContainer}>
         {currentState && (
-          <div className={styles.capitalBox}>{currentState.capital}</div>
-        )}
+          <div className={styles.capitalAndScore}>
+            <div className={styles.capitalBox}>{currentState.capital}</div>
+            <div className={styles.scoreBox}>
+              Score: {score} / {gameStates.length}
+          </div>
+    </div>
+  )}
 
-        <Button>Menu</Button>
-        <Button onClick={() => setShowQuitModal(true)}>Quit</Button>
-        <QuitModal
-          isOpen={showQuitModal}
-          onConfirm={() => navigate("/")}
-          onCancel={() => setShowQuitModal(false)}
-        />
+  <Button>Menu</Button>
+  <Button onClick={() => setShowQuitModal(true)}>Quit</Button>
+  <QuitModal
+    isOpen={showQuitModal}
+    onConfirm={() => navigate("/")}
+    onCancel={() => setShowQuitModal(false)}
+  />
 
-        <ResultsModal
-          isOpen={showResults}
-          score={score}
-          totalRounds={gameStates.length}
-          onClose={() => navigate("/")}
-          onRestart={() => {
-            setScore(0);
-            setShowResults(false);
-            setCurrentRound(0);
-            setCurrentState(gameStates[0]);
-          }}
-          />
-
-
-      </header>
+  <ResultsModal
+    isOpen={showResults}
+    score={score}
+    totalRounds={gameStates.length}
+    onClose={() => navigate("/")}
+    onRestart={() => {
+      setScore(0);
+      setShowResults(false);
+      setCurrentRound(0);
+      setCurrentState(gameStates[0]);
+    }}
+  />
+</header>
 
       <Map onStateClick={handleStateClick} clickedStates={clickedStates} />
 
