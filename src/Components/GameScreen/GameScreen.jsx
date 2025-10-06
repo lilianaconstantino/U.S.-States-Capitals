@@ -95,10 +95,13 @@ function GameScreen() {
   };
 
   return (
-    <div>
-      <header className={styles.headerContainer}>
-        {currentState && (
-          <div className={styles.capitalBox}>{currentState.capital}</div>
+   <div>
+  <header className={styles.headerContainer}>
+    {currentState && (
+      <div className={styles.capitalBox}>
+        <span className={styles.promptText}>Find&nbsp; </span>
+        <span className={styles.stateName}>{currentState.name}</span>
+      </div>
         )}
 
         <Button>Menu</Button>
