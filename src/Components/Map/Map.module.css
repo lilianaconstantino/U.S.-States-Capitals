@@ -2,10 +2,79 @@
   display: flex;
   justify-content: center;
   align-items: center;
-}
-.map {
-  width: 60%;  
-  padding:1rem;
-  height: 100%;
+  width: 100%;
+  height: auto;
+  background: transparent;
+  overflow: hidden;
+  padding: 2rem 0;
 }
 
+.mapWrapper {
+  position: relative;
+  width: 100%;             /* Default for medium/large screens */
+  max-width: 700px;
+  aspect-ratio: 4 / 3;
+  background: transparent;
+  margin: 0 auto;
+  transition: width 0.3s ease; /* smooth resize */
+}
+
+.map {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: transparent;
+}
+
+path {
+  transition: fill 0.3s ease, stroke 0.3s ease;
+}
+path:hover {
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+.mapWrapper.showLabels {
+  filter: brightness(0.98);
+}
+
+
+/* State hover feedback during gameplay */
+path:hover {
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+/* State fill transitions (smooth color change when correct/wrong) */
+path {
+  transition: fill 0.3s ease, stroke 0.3s ease;
+}
+
+/* When viewing the labeled map (answers), soften everything slightly */
+.mapWrapper.showLabels {
+  background-color: transparent;
+  filter: brightness(0.98);
+}
+
+@media (max-width: 600px) {
+  .mapWrapper {
+    width: 90%;          /* make it fill most of screen width */
+    max-width: 500px;
+  }
+}
+
+/* 💻 Medium screens (tablets) */
+@media (min-width: 601px) and (max-width: 1024px) {
+  .mapWrapper {
+    width: 75%;
+    max-width: 650px;
+  }
+}
+
+/* 🖥️ Large screens (desktops) */
+@media (min-width: 1025px) {
+  .mapWrapper {
+    width: 55%;
+    max-width: 800px;
+  }
+}
