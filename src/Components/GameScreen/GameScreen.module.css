@@ -49,9 +49,9 @@
 .hintButton:hover {
   background-color: #F5BB46 !important; /* hover background */
   color: #383b51 !important;
-  border: 1.5px dashed #383b51               /* hover text */
-  justify-content: center; /* Centers horizontally */
-  align-items: center;    /* Centers vertically */
+  border: 1.5px dashed #383b51;
+  justify-content: center; 
+  align-items: center; 
 }
 
 .capitalAndScore {
