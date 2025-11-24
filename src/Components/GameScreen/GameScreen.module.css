@@ -9,6 +9,7 @@
   align-items: center;
   box-shadow: 0px 0px 3.952px 1.581px rgba(0, 0, 0, 0.25);
   width: 700px;
+  margin: auto
 }
 
 .capitalBox {
@@ -16,9 +17,9 @@
   align-items: center;
   justify-content: center;
   padding: 8px 16px;
-  margin-left: 12px;
   background-color: #f0f0f0;
-  border: 2px solid #333;
+  border: 2px solid #3D3F60;
+
   border-radius: 8px;
   font-size: 1.2rem;
   font-weight: bold;
@@ -39,9 +40,21 @@
 }
 
 .scoreBox {
-  background-color: #f4f4f4;
-  border: 2px solid #ccc;
+   display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  color: white;
+  background-color: #3D3F60;
+  border: 2px solid #3D3F60;
   border-radius: 8px;
-  padding: 6px 12px;
+  font-size: 1.2rem;
   font-weight: bold;
+  min-width: 120px;
+  text-align: center;
+}
+
+.menuButtons {
+  display: flex;
+  gap: 16px;
 }
