@@ -1,0 +1,45 @@
+.quizContainer {
+  padding: 24px;
+  max-width: 600px;
+  margin: auto;
+  text-align: center;
+}
+
+.modeSwitch {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.modeSwitch button {
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: 1px solid #444;
+  background: #eee;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.active {
+  background: #ffd54f;
+  border-color: #222;
+}
+
+.questionBox {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.optionsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.scoreBox {
+  margin-top: 20px;
+  font-size: 1rem;
+  font-weight: bold;
+}
