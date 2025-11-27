@@ -6,6 +6,7 @@ import GameScreen from "./Components/GameScreen/GameScreen";
 import Layout from "./Pages/Layout/Layout";
 import HomePage from "./Components/HomePage/HomePage";
 import ResultsModal from "./Components/ResultsModal/ResultsModal";
+import PopQuiz from "./Components/PopQuiz/PopQuiz";
 
 
 // Define routes outside App so they're not recreated every render
@@ -15,8 +16,8 @@ const routes = createBrowserRouter([
     children: [
       { path: "/", element: <HomePage /> },
       { path: "/gamescreen", element: <GameScreen /> },
-      {path: "/resultsmodal", element: <ResultsModal />},
-      // { path: "/library", element: <Library /> },
+      { path: "/resultsmodal", element: <ResultsModal />},
+      { path: "/popquiz", element: <PopQuiz /> },
     ],
   },
 ]);
