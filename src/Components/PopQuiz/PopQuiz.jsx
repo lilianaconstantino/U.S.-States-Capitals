@@ -2,22 +2,22 @@ import React, { useState, useEffect } from "react";
 import styles from "./PopQuiz.module.css";
 
 function PopQuiz() {
-  // Modes: "stateToCapital" or "capitalToState"
   const [mode, setMode] = useState("stateToCapital");
 
-  // Data
   const [stateData, setStateData] = useState([]);
   const [capitalsData, setCapitalsData] = useState([]);
   const [gameStates, setGameStates] = useState([]);
 
-  // Quiz state
   const [currentRound, setCurrentRound] = useState(0);
   const [score, setScore] = useState(0);
+
   const [currentState, setCurrentState] = useState(null);
   const [options, setOptions] = useState([]);
   const [answer, setAnswer] = useState(null);
 
-  // Fetch states
+  // -------------------------
+  // 1. Fetch STATES
+  // -------------------------
   useEffect(() => {
     async function fetchStates() {
       try {
@@ -29,19 +29,21 @@ function PopQuiz() {
                 "6a2NWTwXRlwc1BynCf46kYZG1VeWp170GYjZIeXK",
               "X-Parse-Master-Key":
                 "WEYdiGWSz0gt91skfDe03wX9yqikQTpiVc9Vn2An",
-            },
+            }
           }
         );
         const data = await response.json();
         setStateData(data.results);
-      } catch (error) {
-        console.error("Error fetching states:", error);
+      } catch (e) {
+        console.error("Error fetching states:", e);
       }
     }
     fetchStates();
   }, []);
 
-  // Fetch capitals
+  // -------------------------
+  // 2. Fetch CAPITALS
+  // -------------------------
   useEffect(() => {
     async function fetchCapitals() {
       try {
@@ -53,81 +55,95 @@ function PopQuiz() {
                 "6a2NWTwXRlwc1BynCf46kYZG1VeWp170GYjZIeXK",
               "X-Parse-Master-Key":
                 "WEYdiGWSz0gt91skfDe03wX9yqikQTpiVc9Vn2An",
-            },
+            }
           }
         );
         const data = await response.json();
         setCapitalsData(data.results);
-      } catch (error) {
-        console.error("Error fetching capitals:", error);
+      } catch (e) {
+        console.error("Error fetching capitals:", e);
       }
     }
     fetchCapitals();
   }, []);
 
-  // Merge capitals into states once both have loaded
-  useEffect(() => {
-    if (stateData.length === 0 || capitalsData.length === 0) return;
+  // 3. MERGE capitals into states (the FIXED way)
+useEffect(() => {
+  if (stateData.length === 0 || capitalsData.length === 0) return;
 
-    const capitalLookup = capitalsData.reduce((acc, item) => {
-      acc[item.stateAbbreviation] = item.capital;
-      return acc;
-    }, {});
+  const capitalLookup = capitalsData.reduce((acc, item) => {
+    acc[item.stateAbbreviation] = item.capital;
+    return acc;
+  }, {});
 
-    const merged = stateData.map((state) => ({
-      ...state,
-      capital: capitalLookup[state.postalAbreviation] || "Unknown",
-    }));
+  const merged = stateData.map((state) => ({
+    ...state,
+    capital: capitalLookup[state.postalAbreviation] || "Unknown",
+  }));
 
-    setStateData(merged);
-  }, [capitalsData]); // only run when capitalsData changes
+  setStateData(merged);
+}, [capitalsData]); // <-- ONLY capitalsData here
 
-  // Shuffle states for gameplay
+  // 4. Shuffle game states when merged stateData loads
   useEffect(() => {
     if (stateData.length === 0) return;
 
-    const shuffled = [...stateData].sort(() => 0.5 - Math.random());
+    const shuffled = [...stateData].sort(() => Math.random() - 0.5);
     setGameStates(shuffled);
+
     setCurrentRound(0);
     setScore(0);
     setCurrentState(shuffled[0]);
   }, [stateData]);
 
-  // Generate new question
+ 
+  // 5. When MODE changes → reset + pick a RANDOM question
   useEffect(() => {
-    if (!currentState) return;
+    if (gameStates.length === 0) return;
 
-    // Pick 2 wrong options
-    const wrongChoices = [];
-    while (wrongChoices.length < 2) {
-      const random = gameStates[Math.floor(Math.random() * gameStates.length)];
-      if (random !== currentState && !wrongChoices.includes(random)) {
-        wrongChoices.push(random);
-      }
+    const randomState =
+      gameStates[Math.floor(Math.random() * gameStates.length)];
+
+    setCurrentState(randomState);
+    setCurrentRound(0);
+    setScore(0);
+  }, [mode]);
+
+  // 6. Generate the question + options whenever state or mode changes
+
+  useEffect(() => {
+    if (!currentState || gameStates.length === 0) return;
+
+    // Get 2 wrong choices
+    const wrong = [];
+    while (wrong.length < 2) {
+      const r = gameStates[Math.floor(Math.random() * gameStates.length)];
+      if (r !== currentState && !wrong.includes(r)) wrong.push(r);
     }
 
-    let allOptions =
+    let opts =
       mode === "stateToCapital"
-        ? [currentState.capital, wrongChoices[0].capital, wrongChoices[1].capital]
-        : [currentState.name, wrongChoices[0].name, wrongChoices[1].name];
+        ? [currentState.capital, wrong[0].capital, wrong[1].capital]
+        : [currentState.name, wrong[0].name, wrong[1].name];
 
-    // Shuffle options
-    allOptions = allOptions.sort(() => Math.random() - 0.5);
+    opts = opts.sort(() => Math.random() - 0.5);
 
-    setOptions(allOptions);
+    setOptions(opts);
     setAnswer(mode === "stateToCapital" ? currentState.capital : currentState.name);
   }, [currentState, mode, gameStates]);
 
-  // Handle answer click
-  function handleAnswerClick(option) {
-    if (option === answer) setScore(score + 1);
+  // -------------------------
+  // Handle selecting an answer
+  // -------------------------
+  function handleAnswerClick(opt) {
+    if (opt === answer) setScore((s) => s + 1);
 
     if (currentRound + 1 < gameStates.length) {
-      const nextRound = currentRound + 1;
-      setCurrentRound(nextRound);
-      setCurrentState(gameStates[nextRound]);
+      const next = currentRound + 1;
+      setCurrentRound(next);
+      setCurrentState(gameStates[next]);
     } else {
-      alert(`Game over! Your score: ${score + (option === answer ? 1 : 0)}`);
+      alert(`Game over! Score: ${score + (opt === answer ? 1 : 0)}`);
       resetGame();
     }
   }
@@ -142,7 +158,7 @@ function PopQuiz() {
     <div className={styles.quizContainer}>
       <h1>U.S. States Pop Quiz 🇺🇸</h1>
 
-      {/* Mode switch */}
+      {/* Toggle */}
       <div className={styles.modeSwitch}>
         <button
           className={mode === "stateToCapital" ? styles.active : ""}
@@ -150,6 +166,7 @@ function PopQuiz() {
         >
           State ➜ Capital
         </button>
+
         <button
           className={mode === "capitalToState" ? styles.active : ""}
           onClick={() => setMode("capitalToState")}
@@ -175,14 +192,17 @@ function PopQuiz() {
 
       {/* Options */}
       <div className={styles.optionsGrid}>
-        {options.map((opt, idx) => (
-          <button key={idx} className={styles.optionButton} onClick={() => handleAnswerClick(opt)}>
+        {options.map((opt, i) => (
+          <button
+            key={i}
+            className={styles.optionButton}
+            onClick={() => handleAnswerClick(opt)}
+          >
             {opt}
           </button>
         ))}
       </div>
 
-      {/* Score / Count */}
       <div className={styles.scoreBox}>
         Count: {currentRound + 1} / {gameStates.length} | Score: {score}
       </div>
