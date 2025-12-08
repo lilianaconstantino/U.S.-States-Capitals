@@ -190,7 +190,6 @@ const handleStateClick = (clickedState) => {
         )}
 
         <div className={styles.menuButtons}>
-          <Button>Menu</Button>
           <Button onClick={() => setShowQuitModal(true)}>Quit</Button>
         </div>
 

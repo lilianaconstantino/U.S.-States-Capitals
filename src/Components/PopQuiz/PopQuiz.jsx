@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./PopQuiz.module.css";
+import Button from "../Button/Button";
+import QuitModal from "../QuitModal/QuitModal";
 
 function PopQuiz() {
   const [mode, setMode] = useState("stateToCapital");
@@ -160,7 +163,7 @@ useEffect(() => {
 
       {/* Toggle */}
       <div className={styles.modeSwitch}>
-        <button
+        <Button
           className={mode === "stateToCapital" ? styles.active : ""}
           onClick={() => setMode("stateToCapital")}
         >
@@ -172,7 +175,7 @@ useEffect(() => {
           onClick={() => setMode("capitalToState")}
         >
           Capital ➜ State
-        </button>
+        </Button>
       </div>
 
       {/* Question */}
@@ -199,7 +202,7 @@ useEffect(() => {
             onClick={() => handleAnswerClick(opt)}
           >
             {opt}
-          </button>
+          </Button>
         ))}
       </div>
 

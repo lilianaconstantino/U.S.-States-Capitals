@@ -1,9 +1,19 @@
 .quizContainer {
+  display: flex;
+  flex-direction: column;   /* stack items vertically */
+  align-items: center;      /* horizontal centering */
+  justify-content: center;  /* vertical centering */
   padding: 24px;
   max-width: 600px;
   margin: auto;
-  text-align: center;
+  border-radius: 10px;
+  border: 2px solid var(--Navy, #3D3F60);
+  background: #f5bb46;
+  box-shadow: 0px 3.952px 1.581px rgba(52, 52, 52, 0.25);
+  min-height: 200px;         /* optional: make container tall for vertical centering */
+  text-align: center;       /* optional: keeps text centered */
 }
+
 
 .modeSwitch {
   display: flex;
@@ -13,9 +23,9 @@
 }
 
 .modeSwitch button {
-  padding: 8px 14px;
+  padding: 12px 24px;
   border-radius: 6px;
-  border: 1px solid #444;
+  border: 2px solid #444;
   background: #eee;
   cursor: pointer;
   font-weight: bold;
@@ -34,12 +44,39 @@
 
 .optionsGrid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 10px;
+  grid-template-columns: 1fr;  /* single column, full width */
+  gap: 10px;                    /* spacing between buttons */
+  width: 100%;                  /* make grid span full container width */
 }
 
+.optionsGrid button {
+  width: 100%;                  /* make each button fill the grid column */
+  padding: 12px 16px;           /* adjust padding if needed */
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+
 .scoreBox {
-  margin-top: 20px;
+  margin-top: 15px;
   font-size: 1rem;
   font-weight: bold;
+  min-width: 200px;
+
+   display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  color: white;
+  background-color: #3D3F60;
+  border: 2px solid #3D3F60;
+  border-radius: 8px;
+}
+
+.actionButtons {
+  display: flex;
+  gap: 1rem;           /* spacing between buttons */
+  margin-top: 1rem;    /* space from elements above */
+  justify-content: center; /* center the buttons horizontally */
 }

@@ -1,20 +1,12 @@
-import React from "react";
-import styles from "./ResultsModal.module.css";
+import { useNavigate } from "react-router-dom";
 import Button from "../Button/Button";
+import styles from "./Footer.module.css";
 
-function ResultsModal({
-  isOpen,
-  score,
-  totalRounds,
-  results = [],
-  onClose,
-  onRestart,
-  onViewAnswers, 
-}) {
-  if (!isOpen) return null;
+function GameOver() {
+  const navigate = useNavigate();
 
   return (
-    <div className={styles.resultsOverlay}>
+      <div className={styles.resultsOverlay}>
       <div className={styles.resultsContent}>
         <h2>Game Over!</h2>
         <p>
@@ -24,7 +16,7 @@ function ResultsModal({
 
         <div className={styles.actions}>
           <Button onClick={onRestart}>Play Again</Button>
-          <Button onClick={onViewAnswers}>View Answers</Button>
+          <Button onClick={onViewAnswers}>View Answers on Map</Button>
           <Button onClick={onClose}>Exit</Button>
         </div>
       </div>
@@ -32,4 +24,4 @@ function ResultsModal({
   );
 }
 
-export default ResultsModal;
+export default GameOver;

@@ -1,12 +1,24 @@
 .button {
- border-radius: 10px;
+  display: flex;          /* new */
+  justify-content: center;/* new */
+  align-items: center;    /* ensures perfect vertical centering */
+
+  border-radius: 10px;
   border: 2px solid var(--Navy, #3D3F60);
   background: #FFF4F3;
-  box-shadow: 0px 0px 3.952px 1.581px rgba(0, 0, 0, 0.25);
+  box-shadow: 0px 0px 3.952px 1.581px rgba(52, 52, 52, 0.25);
   padding: 12px 24px;
   font-size: 16px;
- font-weight: 500;
+  font-weight: 500;
   min-width: 120px;
   white-space: nowrap;
   text-align: center;
+}
+
+.button:hover {
+  background: #3D3F60;          /* was stroke */
+  border: 2px solid var(--Navy, #3D3F60);
+  color: #FFF4F3;               /* make text readable */
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
