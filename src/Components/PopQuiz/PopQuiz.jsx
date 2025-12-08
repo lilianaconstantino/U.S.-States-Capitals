@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./PopQuiz.module.css";
+import Button from "../Button/Button";
+import QuitModal from "../QuitModal/QuitModal";
 
 function PopQuiz() {
+  const navigate = useNavigate();
+
   // Modes: "stateToCapital" or "capitalToState"
   const [mode, setMode] = useState("stateToCapital");
 
@@ -16,6 +21,9 @@ function PopQuiz() {
   const [currentState, setCurrentState] = useState(null);
   const [options, setOptions] = useState([]);
   const [answer, setAnswer] = useState(null);
+
+  // Quit modal state
+  const [showQuitModal, setShowQuitModal] = useState(false);
 
   // Fetch states
   useEffect(() => {
@@ -80,7 +88,7 @@ function PopQuiz() {
     }));
 
     setStateData(merged);
-  }, [capitalsData]); // only run when capitalsData changes
+  }, [capitalsData]);
 
   // Shuffle states for gameplay
   useEffect(() => {
@@ -97,7 +105,6 @@ function PopQuiz() {
   useEffect(() => {
     if (!currentState) return;
 
-    // Pick 2 wrong options
     const wrongChoices = [];
     while (wrongChoices.length < 2) {
       const random = gameStates[Math.floor(Math.random() * gameStates.length)];
@@ -111,7 +118,6 @@ function PopQuiz() {
         ? [currentState.capital, wrongChoices[0].capital, wrongChoices[1].capital]
         : [currentState.name, wrongChoices[0].name, wrongChoices[1].name];
 
-    // Shuffle options
     allOptions = allOptions.sort(() => Math.random() - 0.5);
 
     setOptions(allOptions);
@@ -144,18 +150,18 @@ function PopQuiz() {
 
       {/* Mode switch */}
       <div className={styles.modeSwitch}>
-        <button
+        <Button
           className={mode === "stateToCapital" ? styles.active : ""}
           onClick={() => setMode("stateToCapital")}
         >
           State ➜ Capital
-        </button>
-        <button
+        </Button>
+        <Button
           className={mode === "capitalToState" ? styles.active : ""}
           onClick={() => setMode("capitalToState")}
         >
           Capital ➜ State
-        </button>
+        </Button>
       </div>
 
       {/* Question */}
@@ -176,20 +182,31 @@ function PopQuiz() {
       {/* Options */}
       <div className={styles.optionsGrid}>
         {options.map((opt, idx) => (
-          <button key={idx} className={styles.optionButton} onClick={() => handleAnswerClick(opt)}>
+          <Button key={idx} className={styles.optionButton} onClick={() => handleAnswerClick(opt)}>
             {opt}
-          </button>
+          </Button>
         ))}
       </div>
 
-      {/* Score / Count */}
-      <div className={styles.scoreBox}>
-        Count: {currentRound + 1} / {gameStates.length} | Score: {score}
-      </div>
+    {/* Score / Count */}
+<div className={styles.scoreBox}>
+  Count: {currentRound + 1} / {gameStates.length} | Score: {score}
+</div>
 
-      <button className={styles.resetButton} onClick={resetGame}>
-        Reset Game
-      </button>
+{/* Action buttons row */}
+<div className={styles.actionButtons}>
+  <Button className={styles.resetButton} onClick={resetGame}>
+    Reset Game
+  </Button>
+  <Button onClick={() => setShowQuitModal(true)}>Quit</Button>
+</div>
+
+{/* Quit modal */}
+<QuitModal
+  isOpen={showQuitModal}
+  onConfirm={() => navigate("/")}
+  onCancel={() => setShowQuitModal(false)}
+/>
     </div>
   );
 }
