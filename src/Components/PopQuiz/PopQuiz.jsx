@@ -88,18 +88,19 @@ function PopQuiz() {
     setStateData(merged);
   }, [capitalsData]);
 
-  // 4. Shuffle game states when stateData changes
-  useEffect(() => {
-    if (stateData.length === 0) return;
+// 4. Shuffle game states
+useEffect(() => {
+  if (stateData.length === 0) return;
 
-    const shuffled = [...stateData].sort(() => Math.random() - 0.5);
-    setGameStates(shuffled);
-    setCurrentRound(0);
-    setScore(0);
-    setCurrentState(shuffled[0]);
-  }, [stateData]);
+  const shuffled = [...stateData].sort(() => Math.random() - 0.5);
+  setGameStates(shuffled);
 
-  // 5. Reset when mode changes
+  setCurrentRound(0);
+  setScore(0);
+  setCurrentState(shuffled[0]);
+}, [stateData]);
+
+  // 5. Reset on mode change
   useEffect(() => {
     if (gameStates.length === 0) return;
 
@@ -111,28 +112,29 @@ function PopQuiz() {
     setScore(0);
   }, [mode]);
 
-  // 6. Generate options for current question
+  // 6. Generate options
   useEffect(() => {
     if (!currentState || gameStates.length === 0) return;
 
-    const wrongChoices = [];
-    while (wrongChoices.length < 2) {
+    const wrong = [];
+    while (wrong.length < 2) {
       const r = gameStates[Math.floor(Math.random() * gameStates.length)];
-      if (r !== currentState && !wrongChoices.includes(r)) wrongChoices.push(r);
+      if (r !== currentState && !wrong.includes(r)) wrong.push(r);
     }
 
     let opts =
       mode === "stateToCapital"
-        ? [currentState.capital, wrongChoices[0].capital, wrongChoices[1].capital]
-        : [currentState.name, wrongChoices[0].name, wrongChoices[1].name];
+        ? [currentState.capital, wrong[0].capital, wrong[1].capital]
+        : [currentState.name, wrong[0].name, wrong[1].name];
 
-    opts = opts.sort(() => Math.random() - 0.5);
-
-    setOptions(opts);
-    setAnswer(mode === "stateToCapital" ? currentState.capital : currentState.name);
+    setOptions(opts.sort(() => Math.random() - 0.5));
+    setAnswer(
+      mode === "stateToCapital"
+        ? currentState.capital
+        : currentState.name
+    );
   }, [currentState, mode, gameStates]);
 
-  // Handle selecting an answer
   function handleAnswerClick(opt) {
     if (opt === answer) setScore((s) => s + 1);
 
@@ -182,7 +184,8 @@ function PopQuiz() {
             </p>
           ) : (
             <p>
-              <strong>{currentState.capital}</strong> is the capital of which state?
+              <strong>{currentState.capital}</strong> is the capital of which
+              state?
             </p>
           )}
         </div>
@@ -206,20 +209,15 @@ function PopQuiz() {
         Count: {currentRound + 1} / {gameStates.length} | Score: {score}
       </div>
 
-      {/* Action buttons */}
-      <div className={styles.actionButtons}>
-        <Button className={styles.resetButton} onClick={resetGame}>
-          Reset Game
-        </Button>
-        <Button onClick={() => setShowQuitModal(true)}>Quit</Button>
-      </div>
-
       {/* Quit modal */}
       <QuitModal
         isOpen={showQuitModal}
         onConfirm={() => navigate("/")}
         onCancel={() => setShowQuitModal(false)}
       />
+      <Button className={styles.resetButton} onClick={resetGame}>
+        Reset Game
+      </Button>
     </div>
   );
 }
