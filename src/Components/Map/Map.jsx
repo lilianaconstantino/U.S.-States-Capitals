@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { USAMap } from "@mirawision/usa-map-react";
 import styles from "./Map.module.css";
+import useStates from "../hooks/useStates";
 
 function Map({
   onStateClick,
@@ -11,33 +12,12 @@ function Map({
   highlightedStates = [],
   pulseState = null,
 }) {
-  const [stateData, setStateData] = useState([]);
-
   // Fetch state data
-  useEffect(() => {
-    async function fetchStates() {
-      try {
-        const response = await fetch(
-          "https://parseapi.back4app.com/classes/States?limit=50&order=name",
-          {
-            headers: {
-              "X-Parse-Application-Id": "6a2NWTwXRlwc1BynCf46kYZG1VeWp170GYjZIeXK",
-              "X-Parse-Master-Key": "WEYdiGWSz0gt91skfDe03wX9yqikQTpiVc9Vn2An",
-            },
-          }
-        );
-        const data = await response.json();
-        setStateData(data.results);
-      } catch (error) {
-        console.error("Error fetching states:", error);
-      }
-    }
-    fetchStates();
-  }, []);
+   const stateData = useStates();
 
   // Region colors
   const regionColors = {
-    west: { fill: "#EEE485", stroke: "#E98F36" },
+    west: { fill: "#EEE485", stroke: "#615142ff" },
     midwest: { fill: "#F1AEA9", stroke: "#C24A3B" },
     south: { fill: "#BDC06B", stroke: "#4A6F45" },
     northeast: { fill: "#8FBBD3", stroke: "#426D96" },
