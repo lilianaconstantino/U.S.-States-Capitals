@@ -5,15 +5,20 @@ import Button from "../Button/Button";
 import QuitModal from "../QuitModal/QuitModal";
 
 function PopQuiz() {
+  const navigate = useNavigate();
+  const [showQuitModal, setShowQuitModal] = useState(false);
+
+  // Modes: "stateToCapital" or "capitalToState"
   const [mode, setMode] = useState("stateToCapital");
 
+  // Data
   const [stateData, setStateData] = useState([]);
   const [capitalsData, setCapitalsData] = useState([]);
   const [gameStates, setGameStates] = useState([]);
 
+  // Quiz state
   const [currentRound, setCurrentRound] = useState(0);
   const [score, setScore] = useState(0);
-
   const [currentState, setCurrentState] = useState(null);
   const [options, setOptions] = useState([]);
   const [answer, setAnswer] = useState(null);
@@ -83,16 +88,17 @@ function PopQuiz() {
     setStateData(merged);
   }, [capitalsData]);
 
-  // 4. Shuffle game states
-  useEffect(() => {
-    if (stateData.length === 0) return;
+// 4. Shuffle game states
+useEffect(() => {
+  if (stateData.length === 0) return;
 
-    const shuffled = [...stateData].sort(() => Math.random() - 0.5);
-    setGameStates(shuffled);
-    setCurrentRound(0);
-    setScore(0);
-    setCurrentState(shuffled[0]);
-  }, [stateData]);
+  const shuffled = [...stateData].sort(() => Math.random() - 0.5);
+  setGameStates(shuffled);
+
+  setCurrentRound(0);
+  setScore(0);
+  setCurrentState(shuffled[0]);
+}, [stateData]);
 
   // 5. Reset on mode change
   useEffect(() => {
@@ -152,7 +158,7 @@ function PopQuiz() {
     <div className={styles.quizContainer}>
       <h1>U.S. States Pop Quiz 🇺🇸</h1>
 
-      {/* Toggle */}
+      {/* Mode Switch */}
       <div className={styles.modeSwitch}>
         <Button
           className={mode === "stateToCapital" ? styles.active : ""}
@@ -198,10 +204,17 @@ function PopQuiz() {
         ))}
       </div>
 
+      {/* Score */}
       <div className={styles.scoreBox}>
         Count: {currentRound + 1} / {gameStates.length} | Score: {score}
       </div>
 
+      {/* Quit modal */}
+      <QuitModal
+        isOpen={showQuitModal}
+        onConfirm={() => navigate("/")}
+        onCancel={() => setShowQuitModal(false)}
+      />
       <Button className={styles.resetButton} onClick={resetGame}>
         Reset Game
       </Button>
