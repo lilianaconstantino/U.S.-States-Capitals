@@ -5,22 +5,25 @@ import Button from "../Button/Button";
 import QuitModal from "../QuitModal/QuitModal";
 
 function PopQuiz() {
+  const navigate = useNavigate();
+  const [showQuitModal, setShowQuitModal] = useState(false);
+
+  // Modes: "stateToCapital" or "capitalToState"
   const [mode, setMode] = useState("stateToCapital");
 
+  // Data
   const [stateData, setStateData] = useState([]);
   const [capitalsData, setCapitalsData] = useState([]);
   const [gameStates, setGameStates] = useState([]);
 
+  // Quiz state
   const [currentRound, setCurrentRound] = useState(0);
   const [score, setScore] = useState(0);
-
   const [currentState, setCurrentState] = useState(null);
   const [options, setOptions] = useState([]);
   const [answer, setAnswer] = useState(null);
 
-  // -------------------------
   // 1. Fetch STATES
-  // -------------------------
   useEffect(() => {
     async function fetchStates() {
       try {
@@ -32,7 +35,7 @@ function PopQuiz() {
                 "6a2NWTwXRlwc1BynCf46kYZG1VeWp170GYjZIeXK",
               "X-Parse-Master-Key":
                 "WEYdiGWSz0gt91skfDe03wX9yqikQTpiVc9Vn2An",
-            }
+            },
           }
         );
         const data = await response.json();
@@ -44,9 +47,7 @@ function PopQuiz() {
     fetchStates();
   }, []);
 
-  // -------------------------
   // 2. Fetch CAPITALS
-  // -------------------------
   useEffect(() => {
     async function fetchCapitals() {
       try {
@@ -58,7 +59,7 @@ function PopQuiz() {
                 "6a2NWTwXRlwc1BynCf46kYZG1VeWp170GYjZIeXK",
               "X-Parse-Master-Key":
                 "WEYdiGWSz0gt91skfDe03wX9yqikQTpiVc9Vn2An",
-            }
+            },
           }
         );
         const data = await response.json();
@@ -70,37 +71,35 @@ function PopQuiz() {
     fetchCapitals();
   }, []);
 
-  // 3. MERGE capitals into states (the FIXED way)
-useEffect(() => {
-  if (stateData.length === 0 || capitalsData.length === 0) return;
+  // 3. Merge capitals into states
+  useEffect(() => {
+    if (stateData.length === 0 || capitalsData.length === 0) return;
 
-  const capitalLookup = capitalsData.reduce((acc, item) => {
-    acc[item.stateAbbreviation] = item.capital;
-    return acc;
-  }, {});
+    const capitalLookup = capitalsData.reduce((acc, item) => {
+      acc[item.stateAbbreviation] = item.capital;
+      return acc;
+    }, {});
 
-  const merged = stateData.map((state) => ({
-    ...state,
-    capital: capitalLookup[state.postalAbreviation] || "Unknown",
-  }));
+    const merged = stateData.map((state) => ({
+      ...state,
+      capital: capitalLookup[state.postalAbreviation] || "Unknown",
+    }));
 
-  setStateData(merged);
-}, [capitalsData]); // <-- ONLY capitalsData here
+    setStateData(merged);
+  }, [capitalsData]);
 
-  // 4. Shuffle game states when merged stateData loads
+  // 4. Shuffle game states when stateData changes
   useEffect(() => {
     if (stateData.length === 0) return;
 
     const shuffled = [...stateData].sort(() => Math.random() - 0.5);
     setGameStates(shuffled);
-
     setCurrentRound(0);
     setScore(0);
     setCurrentState(shuffled[0]);
   }, [stateData]);
 
- 
-  // 5. When MODE changes → reset + pick a RANDOM question
+  // 5. Reset when mode changes
   useEffect(() => {
     if (gameStates.length === 0) return;
 
@@ -112,22 +111,20 @@ useEffect(() => {
     setScore(0);
   }, [mode]);
 
-  // 6. Generate the question + options whenever state or mode changes
-
+  // 6. Generate options for current question
   useEffect(() => {
     if (!currentState || gameStates.length === 0) return;
 
-    // Get 2 wrong choices
-    const wrong = [];
-    while (wrong.length < 2) {
+    const wrongChoices = [];
+    while (wrongChoices.length < 2) {
       const r = gameStates[Math.floor(Math.random() * gameStates.length)];
-      if (r !== currentState && !wrong.includes(r)) wrong.push(r);
+      if (r !== currentState && !wrongChoices.includes(r)) wrongChoices.push(r);
     }
 
     let opts =
       mode === "stateToCapital"
-        ? [currentState.capital, wrong[0].capital, wrong[1].capital]
-        : [currentState.name, wrong[0].name, wrong[1].name];
+        ? [currentState.capital, wrongChoices[0].capital, wrongChoices[1].capital]
+        : [currentState.name, wrongChoices[0].name, wrongChoices[1].name];
 
     opts = opts.sort(() => Math.random() - 0.5);
 
@@ -135,9 +132,7 @@ useEffect(() => {
     setAnswer(mode === "stateToCapital" ? currentState.capital : currentState.name);
   }, [currentState, mode, gameStates]);
 
-  // -------------------------
   // Handle selecting an answer
-  // -------------------------
   function handleAnswerClick(opt) {
     if (opt === answer) setScore((s) => s + 1);
 
@@ -161,16 +156,16 @@ useEffect(() => {
     <div className={styles.quizContainer}>
       <h1>U.S. States Pop Quiz 🇺🇸</h1>
 
-      {/* Toggle */}
+      {/* Mode Switch */}
       <div className={styles.modeSwitch}>
         <Button
           className={mode === "stateToCapital" ? styles.active : ""}
           onClick={() => setMode("stateToCapital")}
         >
           State ➜ Capital
-        </button>
+        </Button>
 
-        <button
+        <Button
           className={mode === "capitalToState" ? styles.active : ""}
           onClick={() => setMode("capitalToState")}
         >
@@ -196,7 +191,7 @@ useEffect(() => {
       {/* Options */}
       <div className={styles.optionsGrid}>
         {options.map((opt, i) => (
-          <button
+          <Button
             key={i}
             className={styles.optionButton}
             onClick={() => handleAnswerClick(opt)}
@@ -206,13 +201,25 @@ useEffect(() => {
         ))}
       </div>
 
+      {/* Score */}
       <div className={styles.scoreBox}>
         Count: {currentRound + 1} / {gameStates.length} | Score: {score}
       </div>
 
-      <button className={styles.resetButton} onClick={resetGame}>
-        Reset Game
-      </button>
+      {/* Action buttons */}
+      <div className={styles.actionButtons}>
+        <Button className={styles.resetButton} onClick={resetGame}>
+          Reset Game
+        </Button>
+        <Button onClick={() => setShowQuitModal(true)}>Quit</Button>
+      </div>
+
+      {/* Quit modal */}
+      <QuitModal
+        isOpen={showQuitModal}
+        onConfirm={() => navigate("/")}
+        onCancel={() => setShowQuitModal(false)}
+      />
     </div>
   );
 }
