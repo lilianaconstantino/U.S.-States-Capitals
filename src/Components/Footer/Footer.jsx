@@ -10,7 +10,7 @@ function Footer() {
       <footer className={styles.buttonContainer}>
         <Button onClick={() => navigate("/gamescreen")}>Start</Button>
         <Button onClick={() => navigate("/popquiz")}>Pop Quiz</Button>
-        <Button>Library</Button>
+        <Button onClick={() => navigate("/library")}>Library</Button>
       </footer>
     </div>
   );
